@@ -1,0 +1,34 @@
+{
+  "name": "digitizing-health-center",
+  "version": "1.0.0",
+  "description": "MEAN stack application for digitizing health center appointments and records",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "build": "cd frontend && npm install && ng build"
+  },
+  "keywords": [
+    "mean",
+    "mongodb",
+    "express",
+    "angular",
+    "node",
+    "health",
+    "appointments"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.0.3",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
