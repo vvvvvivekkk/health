@@ -1,1 +1,9 @@
 node_modules
+# Angular cache
+frontend/.angular/cache/
+# Environment variables
+.env
+# Build files
+/dist
+/tmp
+/out-tsc
