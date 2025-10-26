@@ -2,6 +2,16 @@ const mongoose = require('mongoose');
 
 const appointmentSchema = mongoose.Schema(
   {
+    student: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    },
+    doctor: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    },
     studentName: {
       type: String,
       required: [true, 'Please add a student name'],
@@ -20,8 +30,8 @@ const appointmentSchema = mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['scheduled', 'completed', 'cancelled'],
-      default: 'scheduled',
+      enum: ['pending', 'approved', 'rejected', 'completed', 'cancelled'],
+      default: 'pending',
     },
   },
   {

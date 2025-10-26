@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 const medicalRecordSchema = mongoose.Schema(
   {
+    student: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    },
     studentName: {
       type: String,
       required: [true, 'Please add a student name'],

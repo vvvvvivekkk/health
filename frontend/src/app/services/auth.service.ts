@@ -7,29 +7,29 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/users';
-  private isLoggedIn = false;
+  private apiUrl = '/api/users';  // Using relative path with proxy
   private currentUser: any = null;
 
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string): Observable<any> {
-    // For demo purposes, allow a dummy login
-    if (email === 'admin@example.com' && password === 'password') {
-      this.isLoggedIn = true;
-      this.currentUser = {
-        name: 'Admin User',
-        email: 'admin@example.com',
-        role: 'admin'
-      };
-      localStorage.setItem('user', JSON.stringify(this.currentUser));
-      return of(this.currentUser);
-    }
-
     return this.http.post(`${this.apiUrl}/login`, { email, password })
       .pipe(
-        map(user => {
-          this.isLoggedIn = true;
+        map((user: any) => {
+          this.currentUser = user;
+          localStorage.setItem('user', JSON.stringify(user));
+          return user;
+        }),
+        catchError(error => {
+          return throwError(() => error);
+        })
+      );
+  }
+
+  register(name: string, email: string, password: string, role: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, { name, email, password, role })
+      .pipe(
+        map((user: any) => {
           this.currentUser = user;
           localStorage.setItem('user', JSON.stringify(user));
           return user;
@@ -41,13 +41,12 @@ export class AuthService {
   }
 
   logout(): void {
-    this.isLoggedIn = false;
     this.currentUser = null;
     localStorage.removeItem('user');
   }
 
   isAuthenticated(): boolean {
-    return this.isLoggedIn || !!localStorage.getItem('user');
+    return !!this.getCurrentUser();
   }
 
   getCurrentUser(): any {
@@ -58,10 +57,22 @@ export class AuthService {
     const user = localStorage.getItem('user');
     if (user) {
       this.currentUser = JSON.parse(user);
-      this.isLoggedIn = true;
       return this.currentUser;
     }
     
     return null;
+  }
+
+  getToken(): string | null {
+    const user = this.getCurrentUser();
+    return user ? user.token : null;
+  }
+
+  getDoctors(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/doctors`);
+  }
+
+  getStudents(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/students`);
   }
 }

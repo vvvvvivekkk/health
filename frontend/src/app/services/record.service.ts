@@ -1,21 +1,29 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecordService {
-  private apiUrl = 'http://localhost:3000/api/records';
+  private apiUrl = '/api/records';  // Using relative path with proxy
 
   constructor(private http: HttpClient) { }
 
-  getRecords(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  getRecords(search?: string): Observable<any[]> {
+    let params = new HttpParams();
+    if (search) {
+      params = params.set('search', search);
+    }
+    return this.http.get<any[]>(this.apiUrl, { params });
   }
 
   createRecord(recordData: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, recordData);
+    const data = {
+      ...recordData,
+      studentId: recordData.studentId
+    };
+    return this.http.post<any>(this.apiUrl, data);
   }
 
   updateRecord(id: string, recordData: any): Observable<any> {

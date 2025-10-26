@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AppointmentService {
-  private apiUrl = 'http://localhost:3000/api/appointments';
+  private apiUrl = '/api/appointments';  // Using relative path with proxy
 
   constructor(private http: HttpClient) { }
 
@@ -24,5 +24,13 @@ export class AppointmentService {
 
   deleteAppointment(id: string): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
+
+  approveAppointment(id: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}/approve`, {});
+  }
+
+  rejectAppointment(id: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}/reject`, {});
   }
 }
